@@ -3,19 +3,26 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "Build SDL2 Project (all src)",
+            "label": "Build SDL3 Project",
             "command": "C:/msys64/mingw64/bin/gcc.exe",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}/src/*.c",              // tous les fichiers .c dans src/
-                "-I${workspaceFolder}/SDL2/include",       // include SDL2
-                "-L${workspaceFolder}/SDL2/lib",           // lib SDL2
+
+                "${workspaceFolder}/src/*.c",   
+
+                "-I${workspaceFolder}/SDL3/include", 
+                "-I${workspaceFolder}/src",
+                "-I${workspaceFolder}/include",     
+                "-L${workspaceFolder}/SDL3/lib", 
+                
                 "-lmingw32",
-                "-lSDL2main",
-                "-lSDL2",
+                "-lSDL3",
+                "-lSDL3_image",
+                "-lSDL3_ttf",
+
                 "-o",
-                "${workspaceFolder}/build/game.exe"        // sortie unique dans build/
+                "${workspaceFolder}/build/awale.exe"        
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -27,7 +34,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "Compiler: GCC via MSYS2 (all .c in src)"
+            "detail": "Compile AWALE Using GCC"
         }
     ]
 }
