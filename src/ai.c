@@ -57,7 +57,7 @@ static Choice optimalChoice(int PlateauList[12], bool AI_Turn, int depth){
         //favorable pour soit meme (si AI_Turn) ou défavorable pour l'adversaire
         // En effet, l'absence de coup possible sans que son propre nombre de pions soit nul indique que l'adversaire est affamé
         // et qu'on ne peut pas le nourrir, ce qui est une situation gagnante.
-        bestChoice.score += 1000*getNumPionsOfPlayer(PlateauList, AI_Turn);
+        bestChoice.score = getNumPionsOfPlayer(PlateauList, AI_Turn);
         return bestChoice;
     }
     for (int i=0;i<nbPos;i++){// pour chaque coup possible
@@ -67,7 +67,7 @@ static Choice optimalChoice(int PlateauList[12], bool AI_Turn, int depth){
         int scoreGained = doTheMovePos(PlateauCopy, pos, AI_Turn);
         Choice childChoice = optimalChoice(PlateauCopy, !AI_Turn, depth -1);
         val = getNumPionsOfPlayer(PlateauCopy, AI_Turn);// valeur heuristique du plateau après le coup
-        int totalScore = 1000*scoreGained + 1000*childChoice.score + val;// score total combinant la prise immédiate, le score futur et l'état du plateau
+        int totalScore = 1000*scoreGained + 1000*childChoice.score;// score total combinant la prise immédiate, le score futur et l'état du plateau
         if ((AI_Turn && totalScore >= valRef) || (!AI_Turn && totalScore <= valRef)){
                 valRef = totalScore;
                 bestChoice.pos = pos;

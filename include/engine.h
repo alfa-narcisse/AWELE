@@ -10,5 +10,5 @@ SDL_Renderer* run_engine(void);
 TTF_Font* load_font(const char* font_path, int font_size);
 
 // Arrêter le moteur SDL et libérer les ressources
-void stop_engine(TTF_Font *police, SDL_Renderer* renderer);
+void stop_engine(SDL_Renderer*renderer, TTF_Font* ListFonts[], int nFont);
 #endif // ENGINE_H

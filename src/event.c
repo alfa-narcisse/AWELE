@@ -23,6 +23,20 @@ void handleQuitEvent(SDL_Event *event, bool *running) {
     }
 }
 
+void handleButtonEvent(Button *btn, const SDL_Event *ev) {
+    if (ev->type == SDL_EVENT_MOUSE_MOTION) {
+        float mx = ev->motion.x;
+        float my = ev->motion.y;
+        btn->hovered = (mx >= btn->rect->x && mx <= btn->rect->x + btn->rect->w &&
+                        my >= btn->rect->y && my <= btn->rect->y + btn->rect->h);
+    }
+
+    if (ev->type == SDL_EVENT_MOUSE_BUTTON_DOWN && btn->hovered) {
+        btn->pressed = true;
+    }
+}
+
+
 int handleMouseButtonDownEvent(SDL_Event *event, bool isPlayer1Turn,int PlateauList[12], int POS_TROUS[12][2]) {
     int possibleMoves[6];
     int nbPos = GetPossibleMoves(PlateauList, possibleMoves, isPlayer1Turn); //

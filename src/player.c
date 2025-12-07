@@ -9,20 +9,37 @@
 // Ici, vous pouvez implémenter des fonctions liées aux joueurs,
 // comme la gestion des tours, les interactions avec l'IA, etc.
 
-void executePlayerCommand(
+int executePlayerCommand(
     SDL_Event *event,
     SDL_Renderer * renderer,
-    TTF_Font* police,
+    TTF_Font* policePlateau,
+    TTF_Font* policeButton,
     SDL_Texture* plateauTexture,
     int PlateauList[12],
     int POS_TROUS[12][2],
-    bool* player1Turn,
+    bool player1Turn,
     int* scorePlayer1,
-    int* scorePlayer2
+    int* scorePlayer2,
+    bool VsAI,
+    Button*btn
 ) {
-    int p = handleMouseButtonDownEvent(event, *player1Turn, PlateauList,POS_TROUS);
+    int p = handleMouseButtonDownEvent(event, player1Turn, PlateauList,POS_TROUS);
     if (p!=-1){
-        doTheMoveDisplay(PlateauList,p, renderer,police,plateauTexture,player1Turn,scorePlayer1,scorePlayer2);
-        *player1Turn = !*player1Turn;
+        doTheMoveDisplay(
+            POS_TROUS,
+            PlateauList,
+            p,
+            renderer,
+            policePlateau,
+            policeButton,
+            plateauTexture,
+            player1Turn,
+            scorePlayer1,
+            scorePlayer2,
+            VsAI,
+            btn
+        );
+        return 0;
     }
+    return -1;
  }
