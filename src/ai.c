@@ -6,7 +6,8 @@
 
 typedef struct Choice{
     int pos;
-    int score;
+    int scorePlateau;
+    int scoreGained;
 } Choice;
 
 static int doTheMovePos(int PlateauList[12], int pos, bool AI_Turn){
@@ -46,7 +47,8 @@ static Choice optimalChoice(int PlateauList[12], bool AI_Turn, int depth){
     bestChoice.pos = -1;
     int val = getNumPionsOfPlayer(PlateauList, AI_Turn);
     if (val==0 || depth ==0){
-        bestChoice.score = val;
+        bestChoice.scorePlateau = val;
+        bestChoice.scoreGained = 0;
         return bestChoice;
     }
     int possibleMoves[6];
@@ -55,9 +57,8 @@ static Choice optimalChoice(int PlateauList[12], bool AI_Turn, int depth){
     if (nbPos ==0){
         // Pas de coup possible, on est à la fin du jeu- On met beaucoup de poids car c'est une situaation
         //favorable pour soit meme (si AI_Turn) ou défavorable pour l'adversaire
-        // En effet, l'absence de coup possible sans que son propre nombre de pions soit nul indique que l'adversaire est affamé
-        // et qu'on ne peut pas le nourrir, ce qui est une situation gagnante.
-        bestChoice.score += 1000*getNumPionsOfPlayer(PlateauList, AI_Turn);
+        bestChoice.scorePlateau = getNumPionsOfPlayer(PlateauList, AI_Turn);
+        bestChoice.scoreGained = 0;
         return bestChoice;
     }
     for (int i=0;i<nbPos;i++){// pour chaque coup possible
@@ -66,12 +67,12 @@ static Choice optimalChoice(int PlateauList[12], bool AI_Turn, int depth){
         CopyPlateau(PlateauList, PlateauCopy);
         int scoreGained = doTheMovePos(PlateauCopy, pos, AI_Turn);
         Choice childChoice = optimalChoice(PlateauCopy, !AI_Turn, depth -1);
-        val = getNumPionsOfPlayer(PlateauCopy, AI_Turn);// valeur heuristique du plateau après le coup
-        int totalScore = 1000*scoreGained + 1000*childChoice.score + val;// score total combinant la prise immédiate, le score futur et l'état du plateau
+        int totalScore = 1000*scoreGained + 1000*childChoice.scoreGained + childChoice.scorePlateau + val;// score total combinant la prise immédiate, le score futur et l'état du plateau
         if ((AI_Turn && totalScore >= valRef) || (!AI_Turn && totalScore <= valRef)){
                 valRef = totalScore;
                 bestChoice.pos = pos;
-                bestChoice.score = totalScore;
+                bestChoice.scorePlateau = val;
+                bestChoice.scoreGained = scoreGained;
             }
         }
     return bestChoice;

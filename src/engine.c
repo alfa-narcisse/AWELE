@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include "engine.h"
 
-#define WINDOW_WIDTH 1475
-#define WINDOW_HEIGHT 1000
+#define WINDOW_WIDTH 1700
+#define WINDOW_HEIGHT 800
 #define FONT_PATH "../assets/fonts/font_film.ttf"
 #define FONT_SIZE 40
 #define LIST_PIONS_INIT {4,4,4,4,4,4,4,4,4,4,4,4}
@@ -24,7 +24,7 @@ SDL_Renderer* run_engine(void){
     SDL_Window* fenetre;
     SDL_Renderer* renderer; 
     bool p = SDL_CreateWindowAndRenderer("Game", WINDOW_WIDTH, WINDOW_HEIGHT, 
-                                         SDL_WINDOW_ALWAYS_ON_TOP | SDL_WINDOW_RESIZABLE, 
+                                         SDL_WINDOW_ALWAYS_ON_TOP, 
                                          &fenetre, &renderer);
     if (!p) {
         fprintf(stderr, "Erreur de création de la fenêtre et du renderer: %s\n", SDL_GetError());
@@ -42,8 +42,10 @@ TTF_Font* load_font(const char* font_path, int font_size){
     return police;
 }
 
-void stop_engine(TTF_Font *police, SDL_Renderer* renderer){
-    TTF_CloseFont(police);
+void stop_engine(SDL_Renderer*renderer, TTF_Font* ListFonts[], int nFont){
+    for (int i =0;i<nFont; i++){
+        TTF_CloseFont(ListFonts[i]);
+    }
     SDL_Window* fenetre = SDL_GetRenderWindow(renderer);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(fenetre);
