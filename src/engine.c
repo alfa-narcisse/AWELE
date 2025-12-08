@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include "engine.h"
 
-#define WINDOW_WIDTH 1700
-#define WINDOW_HEIGHT 800
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
 #define FONT_PATH "../assets/fonts/font_film.ttf"
 #define FONT_SIZE 40
 #define LIST_PIONS_INIT {4,4,4,4,4,4,4,4,4,4,4,4}
