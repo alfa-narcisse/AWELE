@@ -16,5 +16,6 @@
 #include "engine.h"
 #include "ai.h"
 #include "player.h"
+#include "menu.h"
 
 #endif

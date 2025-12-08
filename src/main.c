@@ -2,6 +2,17 @@
 
 
 int main(int argc, char* argv[]){
+
+
+    SDL_Window *win=SDL_CreateWindow("Menu",1280,720,0);
+    SDL_Init(SDL_INIT_VIDEO);
+
+
+    AfficheMenu(win);
+    SDL_DestroyWindow(win);
+    SDL_Quit();
+    return 0;
+    /*
     SDL_Renderer* renderer = run_engine();
     if (!renderer) return -1;
 
@@ -95,4 +106,5 @@ int main(int argc, char* argv[]){
 
     stop_engine(renderer, ListeFont, 2);
     return 0;
+    */
 }
