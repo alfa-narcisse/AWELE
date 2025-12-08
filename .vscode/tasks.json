@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "cppbuild",
+            "type": "shell",
             "label": "Build SDL3 Project",
             "command": "C:/msys64/mingw64/bin/gcc.exe",
             "args": [
