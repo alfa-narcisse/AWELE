@@ -17,7 +17,7 @@
 
 
 
-void AfficheHelp(SDL_Window *win);
+void AfficheHelp(SDL_Window *win, bool*VsAiMode, bool *twoPlayersMode);
 
 
 // type des boutons
@@ -29,7 +29,7 @@ void AfficheHelp(SDL_Window *win);
 // Creation de la fontion affiche help
 
 
-void AfficheMenu( SDL_Window *win) {
+void AfficheMenu( SDL_Window *win, bool*VsAiMode, bool *twoPlayersMode) {
     SDL_Event MenuEvent = {};
     SDL_Renderer *MenuRenderer =SDL_CreateRenderer(win,NULL);
     // Creation de la texture de l'arriere plan
@@ -134,12 +134,20 @@ void AfficheMenu( SDL_Window *win) {
                         break;
                     }
 
-                    if (btn_ModeAI.isHover && btn_ModeAI.isPressed) btn_ModeAI.isPressed = false;
+                    if (btn_ModeAI.isHover && btn_ModeAI.isPressed) {
+                        btn_ModeAI.isPressed = false;
+                        isopen = false;
+                        *VsAiMode = true;
+                        *twoPlayersMode = false;
+                     };
 
-                    if (btn_ModeVSJ.isHover && btn_ModeVSJ.isPressed) btn_ModeVSJ.isPressed = false;
+                    if (btn_ModeVSJ.isHover && btn_ModeVSJ.isPressed) {
+                        btn_ModeVSJ.isPressed = false;
+                        isopen = false;
+                        *VsAiMode = false;
+                        *twoPlayersMode = true;
+                    }
                     break;
-
-
             }
 
         }
@@ -155,6 +163,7 @@ void AfficheMenu( SDL_Window *win) {
         SDL_RenderPresent(MenuRenderer);
     }
 
+    //nettoyage
     SDL_DestroyTexture(btn_Help.pressed);
     SDL_DestroyTexture(btn_Help.hover);
     SDL_DestroyTexture(btn_Help.normal);
@@ -169,10 +178,10 @@ void AfficheMenu( SDL_Window *win) {
     SDL_DestroyTexture(btn_ModeVSJ.normal);
     SDL_DestroyTexture(background);
     SDL_DestroyRenderer(MenuRenderer);
-    if (wanthelp) AfficheHelp(win);
+    if (wanthelp) AfficheHelp(win, VsAiMode, twoPlayersMode);
 
 }
-void AfficheHelp(SDL_Window* win) {
+void AfficheHelp(SDL_Window* win, bool*VsAiMode, bool *twoPlayersMode) {
     SDL_Event Helpevent;
     SDL_Renderer *helprenderer=SDL_CreateRenderer(win,NULL);
     SDL_Texture *backgroundHelp = IMG_LoadTexture(helprenderer,"../assets/images/backgroundhelp.png");
@@ -231,8 +240,6 @@ void AfficheHelp(SDL_Window* win) {
         SDL_RenderTexture(helprenderer,backgroundHelp,&srcrect,&mainRect);
         renderbutton(helprenderer,&btn_Exithelp);
         SDL_RenderPresent(helprenderer);
-
-
     }
     SDL_DestroyTexture(btn_Exithelp.pressed);
     SDL_DestroyTexture(btn_Exithelp.hover);
@@ -244,7 +251,7 @@ void AfficheHelp(SDL_Window* win) {
         SDL_Quit();
     }
     else {
-        AfficheMenu(win);
+        AfficheMenu(win, VsAiMode, twoPlayersMode);
     }
 
 

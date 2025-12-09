@@ -11,7 +11,7 @@ static int distanceSquared(int x1, int y1, int x2, int y2) {
 int getClickedHole(int x, int y, int POS_TROUS[12][2]) {
     for (int i = 0; i < 12; i++) {
         int distSq = distanceSquared(x, y, POS_TROUS[i][0], POS_TROUS[i][1]);
-        if (distSq <= 100 * 100) { // Rayon de 100 pixels
+        if (distSq <= 80 * 80) { // Rayon de 100 pixels
             return i;
         }
     }
