@@ -52,14 +52,14 @@ static void displayScorePlayer(SDL_Renderer*scoreRenderer, TTF_Font* police, int
 
 
     SDL_FRect ScoreRect = {
-        .x=(player1Turn)? 15:1150,
-        .y= 250,
+        .x=(player1Turn)? 15+2:1150+2,
+        .y= 250+2,
         .h = 40,
         .w = 60
     };
     SDL_FRect nameRect = {
-        .x=(player1Turn)? 15:1150,
-        .y= 470,
+        .x=(player1Turn)? 15+2:1150+2,
+        .y= 470+2,
         .h = 40,
         .w = 60
     };
@@ -193,43 +193,53 @@ static void drawCercle(int x, int y, int R, SDL_Surface* surface) {
     SDL_UnlockSurface(surface);
 }
 
+void drawGameBG(SDL_Renderer* plateauRenderer){
+    SDL_Texture* plateauTexture = IMG_LoadTexture(plateauRenderer, "../assets/images/plateauBg.png");
+    if(!plateauTexture){
+        fprintf(stderr,"Erreur lors du chargement de l'image: %s", SDL_GetError());
+        return;
+    }
+    SDL_RenderTexture(plateauRenderer,plateauTexture,NULL,NULL);
+    SDL_DestroyTexture(plateauTexture);
+    SDL_RenderPresent(plateauRenderer);
+}
 
 SDL_Texture* createSurfaceTexturePlateau(SDL_Renderer * renderer){
-    SDL_Surface* surface = SDL_CreateSurface(1595,550,SDL_PIXELFORMAT_RGBA32); 
+    SDL_Surface* surface = SDL_CreateSurface(1280,720,SDL_PIXELFORMAT_RGBA32); 
     if (!surface){
         fprintf(stderr, "Erreur de création de la surface: %s\n", SDL_GetError());
         return NULL;
     } 
     Uint32 blanc = SDL_MapRGBA(SDL_GetPixelFormatDetails(surface->format),NULL,120,120,200, 255);
     SDL_Rect R1 ={
-        .x =0,
-        .y = 150,
-        .h = 80,
+        .x =15,
+        .y = 250,
+        .h = 100,
         .w = 100,
     };
     SDL_Rect R2 ={
-        .x =0,
-        .y = 280,
-        .h = 120,
+        .x =15,
+        .y = 470,
+        .h = 100,
         .w = 100,
     };
 
     SDL_Rect R3 ={
-        .x =110,
-        .y = 0,
-        .h = 550,
-        .w = 1375,
+        .x =125,
+        .y = 120,
+        .h = 580,
+        .w = 1030,
     };
     SDL_Rect R4 ={
-        .x =1495,
-        .y = 150,
-        .h = 80,
+        .x =1150,
+        .y = 250,
+        .h = 100,
         .w = 100,
     };
        SDL_Rect R5 ={
-        .x =1495,
-        .y = 280,
-        .h = 120,
+        .x =1150,
+        .y = 250,
+        .h = 100,
         .w = 100,
     };
 
@@ -238,11 +248,22 @@ SDL_Texture* createSurfaceTexturePlateau(SDL_Renderer * renderer){
     SDL_FillSurfaceRect(surface,&R3,blanc);
     SDL_FillSurfaceRect(surface,&R4,blanc);
     SDL_FillSurfaceRect(surface,&R5, blanc);
-    
     //Dessiner les trous
     for (int i = 0; i<6;i++){
-        drawCercle(225*i+125+110,125,100, surface);
-        drawCercle(225*i+125+110, 425,100, surface);
+        SDL_Rect r1 = { .x = 135+170*i,
+                        .y = 135,
+                        .h = 70,
+                        .w = 160
+                    };
+        SDL_Rect r2 = { .x = 135+170*i,
+                        .y = 615,
+                        .h = 70,
+                        .w = 160
+                    };
+        SDL_FillSurfaceRect(surface,&r1,blanc);
+        SDL_FillSurfaceRect(surface,&r2, blanc);
+        drawCercle(215 + 170*i,300,80, surface);
+        drawCercle(215 + 170*i, 520,80, surface);
     }
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
@@ -267,7 +288,7 @@ void displayPlateauWithDelay(
 }
 
 //
-int displayFinality(
+ void displayFinality(
     SDL_Renderer*victoryRenderer,
     TTF_Font*policePlateau,
     Button *btn_menu_v,

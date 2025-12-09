@@ -10,10 +10,6 @@
 void displayScores(SDL_Renderer* renderer, TTF_Font*police,bool VsAI, int scorePlayer1, int ScorePlayer2);
 
 
-//Afficher le message de victoire au centre de l'écran
-void displayVictory(SDL_Renderer * renderer, TTF_Font* police, int ScorePlayer1, int ScorePlayer2, bool VsAI);
-
-
 //Afficher le contenu des trous sur le plateau
 void displayContainsOfHoles(int ListePions[12], SDL_Renderer * renderer, TTF_Font* police, int POS_TROUS[12][2] );
 
@@ -22,7 +18,7 @@ SDL_Texture* loadPlateauBackground(SDL_Renderer * renderer, const char* filepath
 
 
 //Dessiner la texture de fond du plateau sur le renderer
-void drawPlateauBackground(SDL_Renderer * renderer, SDL_Texture* plateauTexture);   
+void drawGameBG(SDL_Renderer* plateauRenderer);  
 
 //Créer une texture de la surface du plateau de jeu
 SDL_Texture* createSurfaceTexturePlateau(SDL_Renderer * renderer);
