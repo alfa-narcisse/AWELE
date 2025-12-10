@@ -146,7 +146,7 @@ void launch_game(SDL_Window *window, int ListePions[12],bool VsAiMode, bool play
     while(running){
         displayPlateauWithDelay(bgRenderer,bgTexture,police,ListButtons,nbButtons,POS_TROUS,POS_RECT, ListePions,scorePlayer1,scorePlayer2,VsAiMode,1);
         
-        while (SDL_PollEvent(&event) || initial)// ← IMPORTANT !
+        while (SDL_PollEvent(&event) || initial)
         {   
             renderbutton(bgRenderer, &btn_menuRunning);
             renderbutton(bgRenderer, &btn_pauseGame);
@@ -188,23 +188,12 @@ void launch_game(SDL_Window *window, int ListePions[12],bool VsAiMode, bool play
                             doTheMoveDisplay(bgRenderer, police,bgTexture,ListButtons,nbButtons,POS_TROUS,POS_RECT, ListePions, p,VsAiMode, player1Turn,&scorePlayer1, &scorePlayer2);
                             player1Turn = !player1Turn;
                         }
-                        
-                        if (player1Turn && p!=-1){
-                            finalState = ultimateState(ListePions, false);
-                            if (finalState){
-                                running = false;
-                            break;
-                            }
+                        finalState = ultimateState(ListePions, !player1Turn);
+                        if (finalState){
+                            running = false;
+                        }  
+                        break;
                         }
-                        else if (!player1Turn &&p!=-1){
-                            finalState = ultimateState(ListePions, true);
-                            if (finalState){
-                                running = false;
-                            break;
-                            }
-                        }
-                      }  
-                    break;
                 case SDL_EVENT_MOUSE_BUTTON_UP:
                     if (btn_pauseGame.isHover && btn_pauseGame.isPressed) {
                         btn_pauseGame.isPressed = false;
@@ -299,7 +288,7 @@ void popUpFinalityOfGame(
     btn_replay.pressed = IMG_LoadTexture(victoryRenderer, "../assets/images/buttonReplayP.png");
     btn_replay.hover = IMG_LoadTexture(victoryRenderer, "../assets/images/buttonReplayH.png");
     btn_replay.rect = (SDL_FRect){
-        .x = 560+90,
+        .x = 690,
         .y = 565,
         .w = 70,
         .h = 70
@@ -312,7 +301,7 @@ void popUpFinalityOfGame(
     btn_tomenu.pressed = IMG_LoadTexture(victoryRenderer, "../assets/images/buttonMenuP.png");
     btn_tomenu.hover = IMG_LoadTexture(victoryRenderer, "../assets/images/buttonMenuH.png");
     btn_tomenu.rect = (SDL_FRect){
-        .x = 480+90,
+        .x = 520,
         .y = 565,
         .w = 70,
         .h = 70
@@ -323,8 +312,8 @@ void popUpFinalityOfGame(
     SDL_FRect victoryRect = {
         .h = 360,
         .w = 360,
-        .x = 385+80,
-        .y = 230
+        .x = 385+75,
+        .y = 200
     };
     
     while(running){
@@ -424,17 +413,17 @@ void popUpPausedGame(
         fprintf(stderr, "Erreur du chargement de l'image: %s", SDL_GetError());
         return;
     }
-    SDL_Texture* pauseTexture;
+    SDL_Texture* pauseTexture = IMG_LoadTexture(pauseRenderer,"../assets/images/pauseGame.png");
 
     Button btn_replay;
     btn_replay.isHover = false;
     btn_replay.isPressed = false;
-    btn_replay.normal = IMG_LoadTexture(pauseRenderer, "../assets/images/buttonExit.png");
-    btn_replay.pressed = IMG_LoadTexture(pauseRenderer, "../assets/images/buttonExitP.png");
-    btn_replay.hover = IMG_LoadTexture(pauseRenderer, "../assets/images/buttonExitH.png");
+    btn_replay.normal = IMG_LoadTexture(pauseRenderer, "../assets/images/buttonReplay.png");
+    btn_replay.pressed = IMG_LoadTexture(pauseRenderer, "../assets/images/buttonReplayP.png");
+    btn_replay.hover = IMG_LoadTexture(pauseRenderer, "../assets/images/buttonReplayH.png");
     btn_replay.rect = (SDL_FRect){
-        .x = 600,
-        .y = 565,
+        .x = 810,
+        .y = 480,
         .w = 70,
         .h = 70
     };
@@ -446,8 +435,8 @@ void popUpPausedGame(
     btn_EndGame.pressed = IMG_LoadTexture(pauseRenderer, "../assets/images/buttonGameExitP.png");
     btn_EndGame.hover = IMG_LoadTexture(pauseRenderer, "../assets/images/buttonGameExitH.png");
     btn_EndGame.rect = (SDL_FRect){
-        .x = 500,
-        .y = 565,
+        .x = 595,
+        .y = 480,
         .w = 70,
         .h = 70
     };
@@ -459,22 +448,22 @@ void popUpPausedGame(
     btn_tomenu.pressed = IMG_LoadTexture(pauseRenderer, "../assets/images/buttonMenuP.png");
     btn_tomenu.hover = IMG_LoadTexture(pauseRenderer, "../assets/images/buttonMenuH.png");
     btn_tomenu.rect = (SDL_FRect){
-        .x = 400,
-        .y = 565,
+        .x = 395,
+        .y = 480,
         .w = 70,
         .h = 70
     };
 
-    SDL_FRect victoryRect = {
-        .h = 360,
-        .w = 380,
-        .x = 385,
-        .y = 230
+    SDL_FRect pauseRect = {
+        .h = 330,
+        .w = 610,
+        .x = 335,
+        .y = 250
     };
     
     while(running){
         SDL_RenderTexture(pauseRenderer,bgTexture,NULL,NULL);
-        SDL_RenderTexture(pauseRenderer, pauseTexture, NULL, &victoryRect);
+        SDL_RenderTexture(pauseRenderer, pauseTexture, NULL, &pauseRect);
         renderbutton(pauseRenderer, &btn_EndGame);
         renderbutton(pauseRenderer, &btn_replay);
         renderbutton(pauseRenderer, &btn_tomenu);
@@ -582,17 +571,17 @@ void confirmGoToMenuPopUp(
         fprintf(stderr, "Erreur du chargement de l'image: %s", SDL_GetError());
         return;
     }
-    SDL_Texture* pauseTexture;
+    SDL_Texture* pauseTexture = IMG_LoadTexture(confirmRenderer,"../assets/images/confirmGoToMenu.png");
 
     Button btn_replay;
     btn_replay.isHover = false;
     btn_replay.isPressed = false;
-    btn_replay.normal = IMG_LoadTexture(confirmRenderer, "../assets/images/buttonExit.png");
-    btn_replay.pressed = IMG_LoadTexture(confirmRenderer, "../assets/images/buttonExitP.png");
-    btn_replay.hover = IMG_LoadTexture(confirmRenderer, "../assets/images/buttonExitH.png");
+    btn_replay.normal = IMG_LoadTexture(confirmRenderer, "../assets/images/buttonReplay.png");
+    btn_replay.pressed = IMG_LoadTexture(confirmRenderer, "../assets/images/buttonReplayP.png");
+    btn_replay.hover = IMG_LoadTexture(confirmRenderer, "../assets/images/buttonReplayH.png");
     btn_replay.rect = (SDL_FRect){
-        .x = 580,
-        .y = 565,
+        .x = 680,
+        .y = 445,
         .w = 70,
         .h = 70
     };
@@ -605,24 +594,24 @@ void confirmGoToMenuPopUp(
     btn_tomenu.pressed = IMG_LoadTexture(confirmRenderer, "../assets/images/buttonMenuP.png");
     btn_tomenu.hover = IMG_LoadTexture(confirmRenderer, "../assets/images/buttonMenuH.png");
     btn_tomenu.rect = (SDL_FRect){
-        .x = 460,
-        .y = 565,
+        .x = 530,
+        .y = 445,
         .w = 70,
         .h = 70
     };
 
 
 
-    SDL_FRect victoryRect = {
+    SDL_FRect confirmMenu = {
         .h = 360,
-        .w = 380,
-        .x = 385,
-        .y = 230
+        .w = 360,
+        .x = 385+75,
+        .y = 200
     };
     
     while(running){
         SDL_RenderTexture(confirmRenderer,bgTexture,NULL,NULL);
-        SDL_RenderTexture(confirmRenderer, pauseTexture, NULL, &victoryRect);
+        SDL_RenderTexture(confirmRenderer, pauseTexture, NULL, &confirmMenu);
         renderbutton(confirmRenderer, &btn_replay);
         renderbutton(confirmRenderer, &btn_tomenu);
         SDL_RenderPresent(confirmRenderer);
