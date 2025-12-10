@@ -14,7 +14,6 @@
 #include "display.h"
 #include "outils.h"
 #include "ai.h"
-#include "player.h"
 #include "menu.h"
 
 #endif

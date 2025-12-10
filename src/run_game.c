@@ -86,6 +86,7 @@ void launch_game(SDL_Window *window, int ListePions[12],bool VsAiMode, bool play
     bool goToMenu = false;
     bool pauseGame = false;
     bool finalState = false;
+    bool initial = true;
     SDL_Event event;
     
     TTF_Font*police = TTF_OpenFont("../assets/fonts/font_plateau.ttf", 60);
@@ -138,13 +139,14 @@ void launch_game(SDL_Window *window, int ListePions[12],bool VsAiMode, bool play
         .h = 70
     };
 
+    Button* ListButtons[2];
+    ListButtons[0] = &btn_menuRunning;
+    ListButtons[1] = &btn_pauseGame;
+    int nbButtons = 2;
     while(running){
-        SDL_RenderTexture(bgRenderer, bgTexture,NULL,NULL);
-        renderbutton(bgRenderer, &btn_menuRunning);
-        renderbutton(bgRenderer, &btn_pauseGame);
-        displayPlateauWithDelay(bgRenderer,bgTexture,police,POS_TROUS,POS_RECT, ListePions,scorePlayer1,scorePlayer2,VsAiMode,1);
+        displayPlateauWithDelay(bgRenderer,bgTexture,police,ListButtons,nbButtons,POS_TROUS,POS_RECT, ListePions,scorePlayer1,scorePlayer2,VsAiMode,1);
         
-        while (SDL_PollEvent(&event))// ← IMPORTANT !
+        while (SDL_PollEvent(&event) || initial)// ← IMPORTANT !
         {   
             renderbutton(bgRenderer, &btn_menuRunning);
             renderbutton(bgRenderer, &btn_pauseGame);
@@ -164,7 +166,7 @@ void launch_game(SDL_Window *window, int ListePions[12],bool VsAiMode, bool play
             if (VsAiMode && player1Turn){
                 int pos = bestChoiceAI(ListePions, depht);
                 if (pos != -1){
-                    doTheMoveDisplay(bgRenderer, police,POS_TROUS, POS_RECT, ListePions, pos,VsAiMode, player1Turn,&scorePlayer1, &scorePlayer2);
+                    doTheMoveDisplay(bgRenderer, police,bgTexture,ListButtons,nbButtons,POS_TROUS, POS_RECT, ListePions, pos,VsAiMode, player1Turn,&scorePlayer1, &scorePlayer2);
                     finalState = ultimateState(ListePions, player1Turn);
                     player1Turn = false;
                 }
@@ -183,7 +185,7 @@ void launch_game(SDL_Window *window, int ListePions[12],bool VsAiMode, bool play
                     if ((!VsAiMode && player1Turn) || !player1Turn){
                         int p = handleMouseButtonDownEvent(px,py,player1Turn, ListePions, POS_TROUS);
                         if (p!=-1){
-                            doTheMoveDisplay(bgRenderer, police,POS_TROUS,POS_RECT, ListePions, p,VsAiMode, player1Turn,&scorePlayer1, &scorePlayer2);
+                            doTheMoveDisplay(bgRenderer, police,bgTexture,ListButtons,nbButtons,POS_TROUS,POS_RECT, ListePions, p,VsAiMode, player1Turn,&scorePlayer1, &scorePlayer2);
                             player1Turn = !player1Turn;
                         }
                         
@@ -218,6 +220,7 @@ void launch_game(SDL_Window *window, int ListePions[12],bool VsAiMode, bool play
                     }
                     break;
             }
+            initial = false; // Pour lancer directement l'IA même si on ne fait aucun mouvement
         } 
     }
     freeButton(&btn_menuRunning);
@@ -279,6 +282,9 @@ void popUpFinalityOfGame(
     }
     else{
         victoryTexture = IMG_LoadTexture(victoryRenderer, "../assets/images/player2Win.png");
+        if (VsAI){
+            depht+=1;
+        } 
     }
 
     if (!victoryTexture){
@@ -293,7 +299,7 @@ void popUpFinalityOfGame(
     btn_replay.pressed = IMG_LoadTexture(victoryRenderer, "../assets/images/buttonReplayP.png");
     btn_replay.hover = IMG_LoadTexture(victoryRenderer, "../assets/images/buttonReplayH.png");
     btn_replay.rect = (SDL_FRect){
-        .x = 560,
+        .x = 560+90,
         .y = 565,
         .w = 70,
         .h = 70
@@ -306,7 +312,7 @@ void popUpFinalityOfGame(
     btn_tomenu.pressed = IMG_LoadTexture(victoryRenderer, "../assets/images/buttonMenuP.png");
     btn_tomenu.hover = IMG_LoadTexture(victoryRenderer, "../assets/images/buttonMenuH.png");
     btn_tomenu.rect = (SDL_FRect){
-        .x = 480,
+        .x = 480+90,
         .y = 565,
         .w = 70,
         .h = 70
@@ -316,8 +322,8 @@ void popUpFinalityOfGame(
 
     SDL_FRect victoryRect = {
         .h = 360,
-        .w = 380,
-        .x = 385,
+        .w = 360,
+        .x = 385+80,
         .y = 230
     };
     
@@ -377,7 +383,7 @@ void popUpFinalityOfGame(
     SDL_DestroyRenderer(victoryRenderer);
 
     if (replay){
-        launch_game(window, ListeP,VsAI, true,depht+2,0,0);
+        launch_game(window, ListeP,VsAI, true,depht,0,0);
     }
 
     else if(toMenu){
@@ -671,7 +677,8 @@ void confirmGoToMenuPopUp(
         launch_game(window, ListePions,VsAI, player1Turn,depht,scorePlayer1,scorePlayer2);
     }
     else if(toMenu){
-        AfficheMenu(window, ListePions);
+        int ListeP[12] = {4,4,4,4,4,4,4,4,4,4,4,4};
+        AfficheMenu(window, ListeP);
     }
     else if (quitDirectly){
         TTF_Quit();

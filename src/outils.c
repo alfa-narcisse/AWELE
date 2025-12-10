@@ -87,6 +87,9 @@ void inCrementInPos(int PlateauList[12], int pos){
 void doTheMoveDisplay(
     SDL_Renderer*plateauRenderer,
     TTF_Font* policePlateau,
+    SDL_Texture *bgTexture,
+    Button*ListButtons[],
+    int nbButtons,
     int POS_TROUS[12][2],
     int POS_RECT[12][2],
     int PlateauList[12], 
@@ -100,14 +103,15 @@ void doTheMoveDisplay(
     if (PlateauList == NULL || posInit <0 || posInit >=12 ||  policePlateau == NULL ||  scorePlayer1 == NULL || scorePlayer2 == NULL) return;
     int NBPions = PlateauList[posInit];
     PlateauList[posInit] =0;
-    SDL_Texture * plateauTexture = SDL_CreateTexture(plateauRenderer,SDL_PIXELFORMAT_ARGB32,SDL_TEXTUREACCESS_TARGET,1280,720);
     for (int i=1;i<=NBPions;i++){
         if ((posInit + i)%12 != posInit){// éviter de déposer une pierre dans le trou de départ
             PlateauList[(posInit + i)%12] +=1;
             displayPlateauWithDelay(
                 plateauRenderer,
-                plateauTexture,
+                bgTexture,
                 policePlateau,
+                ListButtons,
+                nbButtons,
                 POS_TROUS,
                 POS_RECT,
                 PlateauList,
@@ -142,10 +146,14 @@ void doTheMoveDisplay(
         while (finalPos >= minRef && finalPos <= maxRef && (PlateauList [finalPos] == 2 || PlateauList[finalPos] ==3)){
             PlateauList[finalPos] =0;
             finalPos -=1;
+            //SDL_RenderClear(plateauRenderer);
+            //SDL_RenderTexture(plateauRenderer, bgTexture, NULL,NULL);
             displayPlateauWithDelay(
                 plateauRenderer,
-                plateauTexture,
+                bgTexture,
                 policePlateau,
+                ListButtons,
+                nbButtons,
                 POS_TROUS,
                 POS_RECT,
                 PlateauList,
@@ -154,9 +162,10 @@ void doTheMoveDisplay(
                 VsAI,
                 800
             );
-        }
+        } 
     }
 }
+
 
 void freeButton(Button *btn){
     SDL_DestroyTexture(btn->pressed);

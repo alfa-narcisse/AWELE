@@ -28,6 +28,8 @@ void displayPlateauWithDelay(
     SDL_Renderer * rendererPlateau,
     SDL_Texture*plateauTexture, 
     TTF_Font* policePlateau,
+    Button*ListButtons[],
+    int nbButtons,
     int POS_TROUS[12][2],
     int POS_RECT[12][2],
     int ListePions[12],

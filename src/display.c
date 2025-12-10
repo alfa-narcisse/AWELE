@@ -251,6 +251,8 @@ void displayPlateauWithDelay(
     SDL_Renderer * rendererPlateau,
     SDL_Texture*plateauTexture, 
     TTF_Font* policePlateau,
+    Button*ListButtons[],
+    int nbButtons,
     int POS_TROUS[12][2],
     int POS_RECT[12][2],
     int ListePions[12],
@@ -259,7 +261,11 @@ void displayPlateauWithDelay(
     bool VsAI,
     int delayMs
     ){
-
+    SDL_RenderClear(rendererPlateau);
+    SDL_RenderTexture(rendererPlateau, plateauTexture, NULL,NULL);
+    for (int btn=0; btn<nbButtons; btn++){
+                 renderbutton(rendererPlateau, ListButtons[btn]);
+            } 
     //SDL_RenderTexture(rendererPlateau,plateauTexture,NULL,NULL);
     displayScores(rendererPlateau, policePlateau,VsAI, scorePlayer1,scorePlayer2);
     displayContainsOfHoles(ListePions, rendererPlateau, policePlateau, POS_TROUS,POS_RECT);

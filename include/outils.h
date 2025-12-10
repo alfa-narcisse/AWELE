@@ -62,6 +62,9 @@ void inCrementInPos(int PlateauList[12], int pos);
 void doTheMoveDisplay(
     SDL_Renderer*plateauRenderer,
     TTF_Font* policePlateau,
+    SDL_Texture *bgTexture,
+    Button*LisButtons[],
+    int nbButtons,
     int POS_TROUS[12][2],
     int POS_RECT[12][2],
     int PlateauList[12], 
