@@ -90,9 +90,9 @@ void displayContainsOfHoles(int ListePions[12], SDL_Renderer * renderer, TTF_Fon
         
         SDL_Color Noire ={
             .a =255,
-            .b = 45,
-            .g = 100,
-            .r = 100
+            .b = 0,
+            .g = 30,
+            .r = 50
         };
         SDL_Surface *SurfaceText = TTF_RenderText_Blended(police, pionText, sizeof(pionText), Noire);
         if(!SurfaceText){
