@@ -14,12 +14,16 @@ static int doTheMovePos(int PlateauList[12], int pos, bool AI_Turn){
     if (PlateauList == NULL || pos <0 || pos >=12) return -1;
     int NBPions = PlateauList[pos];
     PlateauList[pos] =0;
-    for (int i=1;i<=NBPions;i++){
+    int i = 1;
+    int copyNbPions= NBPions;
+    while (0<NBPions){
         if ((pos + i)%12 != pos){// éviter de déposer une pierre dans le trou de départ
             PlateauList[(pos + i)%12] +=1;
+            NBPions--;
         }
+        i++;
     }
-    int finalPos = (pos + NBPions) % 12; // position finale
+    int finalPos = (pos + copyNbPions) % 12; // position finale
     int minRef = (AI_Turn) ? 6: 0;
     int maxRef = (AI_Turn) ? 11 : 5;
     int scoreGained =0;

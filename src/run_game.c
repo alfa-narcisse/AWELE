@@ -186,14 +186,15 @@ void launch_game(SDL_Window *window, int ListePions[12],bool VsAiMode, bool play
                         int p = handleMouseButtonDownEvent(px,py,player1Turn, ListePions, POS_TROUS);
                         if (p!=-1){
                             doTheMoveDisplay(bgRenderer, police,bgTexture,ListButtons,nbButtons,POS_TROUS,POS_RECT, ListePions, p,VsAiMode, player1Turn,&scorePlayer1, &scorePlayer2);
+                            finalState = ultimateState(ListePions, player1Turn);
+                            if (finalState){
+                                running = false;
+                                break;
+                            }
                             player1Turn = !player1Turn;
                         }
-                        finalState = ultimateState(ListePions, !player1Turn);
-                        if (finalState){
-                            running = false;
-                        }  
-                        break;
-                        }
+                    }
+                    break;
                 case SDL_EVENT_MOUSE_BUTTON_UP:
                     if (btn_pauseGame.isHover && btn_pauseGame.isPressed) {
                         btn_pauseGame.isPressed = false;

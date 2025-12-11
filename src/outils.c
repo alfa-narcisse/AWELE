@@ -103,7 +103,9 @@ void doTheMoveDisplay(
     if (PlateauList == NULL || posInit <0 || posInit >=12 ||  policePlateau == NULL ||  scorePlayer1 == NULL || scorePlayer2 == NULL) return;
     int NBPions = PlateauList[posInit];
     PlateauList[posInit] =0;
-    for (int i=1;i<=NBPions;i++){
+    int i =1;
+    int copyNbPions = NBPions;
+    while(0<copyNbPions){
         if ((posInit + i)%12 != posInit){// éviter de déposer une pierre dans le trou de départ
             PlateauList[(posInit + i)%12] +=1;
             displayPlateauWithDelay(
@@ -120,7 +122,9 @@ void doTheMoveDisplay(
                 VsAI,
                 800
             );
+            copyNbPions--;  
         }
+        i++;
     }
     int finalPos = (posInit + NBPions) % 12; // position finale
     int minRef = (player1Turn) ? 6: 0;
