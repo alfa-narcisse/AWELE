@@ -5,7 +5,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "umbrella.h"
-
+#include "sound.h"
 typedef struct Button{
     SDL_FRect rect;
     SDL_Texture* normal;
@@ -73,15 +73,7 @@ int GetPossibleMoves(int PlateauList[12],  int dstPossibleMoves[6],bool player1T
 
 bool ultimateState(int PlateauList[12], bool player1Turn){
     int possibleMoves[6];
-    if (player1Turn)
-        return isMyOpponentStarving(PlateauList, false) ==0 && GetPossibleMoves(PlateauList, possibleMoves, true)==0 ;
-    else
-        return isMyOpponentStarving(PlateauList, true) ==0 && GetPossibleMoves(PlateauList, possibleMoves, false)==0 ;
-}
-
-void inCrementInPos(int PlateauList[12], int pos){
-        if (PlateauList == NULL || pos < 0 || pos >= 12) return;
-        PlateauList[pos] += 1;
+    return isMyOpponentStarving(PlateauList, !player1Turn)&& GetPossibleMoves(PlateauList, possibleMoves, !player1Turn)==0 ;
 }
 
 
@@ -89,10 +81,10 @@ void doTheMoveDisplay(
     SDL_Renderer*plateauRenderer,
     TTF_Font* policePlateau,
     SDL_Texture *bgTexture,
-    Button*ListButtons[],
     SDL_Texture *graineTexture,
     SDL_Texture *handTexture,
     SDL_Texture *handTextureLeft,
+    Button*ListButtons[],
     int nbButtons,
     int POS_TROUS[12][2],
     int POS_RECT[12][2],
@@ -101,7 +93,8 @@ void doTheMoveDisplay(
     bool VsAI, 
     bool player1Turn,
     int* scorePlayer1, 
-    int* scorePlayer2
+    int* scorePlayer2,
+    AudioStreamInstance* ListSoundsPions[4]
     )
 {
     if (PlateauList == NULL || posInit <0 || posInit >=12 ||  policePlateau == NULL ||  scorePlayer1 == NULL || scorePlayer2 == NULL) return;
@@ -133,8 +126,9 @@ void doTheMoveDisplay(
             *scorePlayer1,
             *scorePlayer2,
             VsAI,
-            100
-        );    
+            1
+        );
+        PlaySoundOfPion(ListSoundsPions);
         pos_debut = pos_suiv;
     }
 
@@ -197,8 +191,9 @@ void doTheMoveDisplay(
                 *scorePlayer1,
                 *scorePlayer2,
                 VsAI,
-                10
+                1
             );
+            PlaySoundOfPion(ListSoundsPions);
             PlateauList[finalPos] =0;
             finalPos -=1;
         } 

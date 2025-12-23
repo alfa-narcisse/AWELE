@@ -15,6 +15,6 @@ int getClickedHole(int x, int y, int POS_TROUS[12][2]);
 int handleMouseButtonDownEvent(int x, int y, bool isPlayer1Turn,int PlateauList[12], int POS_TROUS[12][2]);
 
 
-void launch_game(SDL_Window *window, int ListePions[12],bool VsAiMode, bool player1Turn, int depht,int scorePlayer1, int scorePlayer2);
+void launch_game(SDL_Window *window, int ListePions[12],bool VsAiMode,bool start, bool player1Turn, int depht,int scorePlayer1, int scorePlayer2);
 
 #endif // EVENT_H

@@ -17,5 +17,8 @@
 // Retourne la position du meilleur coup s'il y en a un, sinon -1
 int bestChoiceAI(int PlateauList[12], int depth);
 
+int MCTS(int plateau[12], int scoreAI, int scoreP2);
+
+int bruteForceMethode(int plateau[12], int scoreAI, int scoreP2);
 
 #endif // AI_H

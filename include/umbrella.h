@@ -15,6 +15,7 @@
 #include "outils.h"
 #include "ai.h"
 #include "menu.h"
+#include "sound.h"
 #include "animation.h"
 #include <math.h>
 #endif
