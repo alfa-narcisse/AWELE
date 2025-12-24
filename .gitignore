@@ -1,0 +1,16 @@
+# Dossiers de compilation
+/build/
+/bin/
+/SDL3/
+
+# Fichiers exécutables et binaires
+*.exe
+*.dll
+*.res
+*.o
+
+# Configuration VS Code (souvent personnel)
+.vscode/
+
+# Fichiers temporaires ou logs
+*.log
